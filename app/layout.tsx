@@ -2,6 +2,15 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./app.css";
 
+// 1. Add the necessary Amplify and Authenticator imports
+import { Amplify } from "aws-amplify";
+import outputs from "@/amplify_outputs.json";
+import AuthenticatorWrapper from "./AuthenticatorWrapper";
+import "@aws-amplify/ui-react/styles.css";
+
+// 2. Configure Amplify with your project settings
+Amplify.configure(outputs);
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -16,7 +25,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        {/* 3. Wrap the children with AuthenticatorWrapper */}
+        <AuthenticatorWrapper>
+          {children}
+        </AuthenticatorWrapper>
+      </body>
     </html>
   );
 }
