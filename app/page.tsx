@@ -6,17 +6,16 @@ import type { Schema } from "@/amplify/data/resource";
 import "./../app/app.css";
 import { Amplify } from "aws-amplify";
 import outputs from "@/amplify_outputs.json";
-// 1. Import the useAuthenticator hook
 import { useAuthenticator } from "@aws-amplify/ui-react";
 import "@aws-amplify/ui-react/styles.css";
 
-Amplify.configure(outputs);
+//Amplify.configure(outputs);
 
 const client = generateClient<Schema>();
 
 export default function App() {
-  // 2. Initialize the signOut function from the hook
-  const { signOut } = useAuthenticator();
+  // 1. Updated to extract 'user' from the hook
+  const { user, signOut } = useAuthenticator();
   const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
 
   function listTodos() {
@@ -41,7 +40,9 @@ export default function App() {
 
   return (
     <main>
-      <h1>My todos</h1>
+      {/* 2. Dynamically render the user's login ID */}
+      <h1>{user?.signInDetails?.loginId}'s todos</h1>
+      
       <button onClick={createTodo}>+ new</button>
       <ul>
         {todos.map((todo) => (
@@ -57,7 +58,6 @@ export default function App() {
           Review next steps of this tutorial.
         </a>
       </div>
-      {/* 3. Add the Sign out button */}
       <button onClick={signOut} style={{ marginTop: '20px' }}>
         Sign out
       </button>
